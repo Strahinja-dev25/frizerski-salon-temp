@@ -1,0 +1,153 @@
+// ============================================================================
+// Prisma Schema - Frizerski Salon Template
+// ============================================================================
+// Baza optimizovana za PostgreSQL (Supabase) preko Prisma ORM-a.
+// Svi modeli imaju createdAt/updatedAt polja.
+// Cascade delete: brisanje User-a briše sve njegove Appointment i TimeOff zapise.
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+/// Uloge u sistemu: ADMIN (vlasnik/menadžer) ili STAFF (radnik/frizer)
+enum Role {
+  ADMIN
+  STAFF
+}
+
+/// Statusi termina
+enum AppointmentStatus {
+  PENDING
+  APPROVED
+  CANCELLED_BY_CLIENT
+  REJECTED
+}
+
+/// Dani u nedelji za raspored radnog vremena
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+// ---------------------------------------------------------------------------
+// Models
+// ---------------------------------------------------------------------------
+
+/// Radnici i Admini — povezani sa Clerk autentifikacijom
+model User {
+  id          String   @id @default(cuid())
+  clerkUserId String   @unique /// Clerk external ID za autentifikaciju
+  name        String
+  email       String
+  role        Role     @default(STAFF)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  /// Relacije — cascade delete briše sve termine i slobodne dane radnika
+  appointments Appointment[]
+  timeOffs     TimeOff[]
+
+  @@index([clerkUserId])
+  @@index([email])
+}
+
+/// Usluge salona — kreira i menja samo Admin
+model Service {
+  id              String   @id @default(cuid())
+  name            String /// Naziv usluge (npr. "Muško šišanje")
+  description     String   @default("") /// Kratak opis usluge
+  price           Int /// Cena u RSD (bez decimala, npr. 1500)
+  durationMinutes Int /// Trajanje u minutima (npr. 30)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  /// Relacija sa terminima
+  appointments Appointment[]
+}
+
+/// Zakazani termini klijenata
+model Appointment {
+  id          String            @id @default(cuid())
+  clientName  String /// Ime i prezime klijenta
+  clientEmail String /// Email klijenta (za /status stranicu)
+  clientPhone String /// Telefon klijenta
+  startTime   DateTime /// Početak termina
+  endTime     DateTime /// Kraj termina
+  status      AppointmentStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  /// Koji radnik pruža uslugu
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// Koja usluga se radi
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+
+  @@index([startTime])
+  @@index([clientEmail])
+  @@index([userId])
+  @@index([status])
+}
+
+/// Slobodni dani radnika — radnik unosi razlog zašto ne može da radi
+model TimeOff {
+  id        String   @id @default(cuid())
+  date      DateTime /// Datum slobodnog dana
+  reason    String /// Razlog (npr. "Bolovanje", "Godišnji odmor")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /// Koji radnik
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([date])
+}
+
+/// Globalna podešavanja salona — TAČNO JEDAN RED sa id: "global"
+/// Sadrži toggle za pauziranje zakazivanja i default radno vreme
+model SalonSettings {
+  id              String   @id @default("global") /// Uvek "global"
+  isBookingActive Boolean  @default(true) /// Da li je zakazivanje aktivno
+  openingTime     String   @default("09:00") /// Format "HH:mm"
+  closingTime     String   @default("20:00") /// Format "HH:mm"
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  /// Relacija sa rasporedom po danima
+  workSchedules WorkSchedule[]
+}
+
+/// Radno vreme po danima u nedelji — za kontakt sekciju i booking logiku
+model WorkSchedule {
+  id          String    @id @default(cuid())
+  dayOfWeek   DayOfWeek @unique /// Svaki dan se pojavljuje samo jednom
+  isOpen      Boolean   @default(true) /// Da li salon radi tog dana
+  openingTime String    @default("09:00") /// Format "HH:mm" (može se razlikovati po danu)
+  closingTime String    @default("20:00") /// Format "HH:mm"
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  /// Povezano sa globalnim podešavanjima
+  salonSettingsId String        @default("global")
+  salonSettings   SalonSettings @relation(fields: [salonSettingsId], references: [id], onDelete: Cascade)
+
+  @@index([dayOfWeek])
+}
