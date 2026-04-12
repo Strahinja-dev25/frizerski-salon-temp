@@ -200,6 +200,24 @@ export async function deleteServiceAction(
 }
 
 // ---------------------------------------------------------------------------
+// Worker/Staff Actions (samo Admin)
+// ---------------------------------------------------------------------------
+
+export async function updateUserRoleAction(userId: string, newRole: Role): Promise<ApiResponse> {
+  try {
+    const { error } = await getAuthenticatedUser("ADMIN");
+    if (error) return { success: false, message: error };
+
+    const { updateUserRole } = await import("@/services/staff-service");
+    await updateUserRole(userId, newRole);
+    return { success: true, message: "Korisniku je uspešno ažurirana rola." };
+  } catch (error) {
+    console.error("[STAFF ACTION] Greška:", error);
+    return { success: false, message: "Došlo je do greške prilikom promene role." };
+  }
+}
+
+// ---------------------------------------------------------------------------
 // TimeOff Actions
 // ---------------------------------------------------------------------------
 
