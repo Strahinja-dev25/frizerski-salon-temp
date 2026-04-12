@@ -21,8 +21,9 @@ export default async function OdmoriPage() {
   // Prilagodjavanje tipova za props
   const sanitizedTimeoffs = timeoffs.map((to) => {
      let u: undefined | { name: string } = undefined;
-     if ("user" in to && to.user && typeof (to.user as any).name === "string") {
-        u = { name: (to.user as any).name };
+     const t = to as typeof to & { user?: { name: string } };
+     if (t.user && typeof t.user.name === "string") {
+        u = { name: t.user.name };
      }
      return {
         id: to.id,
