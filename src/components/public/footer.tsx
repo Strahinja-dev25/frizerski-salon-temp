@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Scissors, MapPin, MapPinned, Phone, Mail } from "lucide-react"
+import { Scissors, MapPin, MapPinned, Phone, Mail, Camera, Share2, Globe } from "lucide-react"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -20,14 +20,14 @@ export function Footer() {
               Vrhunski frizerski salon gde tradicija sreće moderan stil. Naš cilj je da svaki klijent izađe sa osmehom na licu i savršenom frizurom.
             </p>
             <div className="flex gap-4 mt-2">
-              <Link href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-background border border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all text-xs font-bold">
-                IG
+              <Link href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-background border border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all">
+                <Camera className="h-5 w-5" />
               </Link>
               <Link href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-background border border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all text-xs font-bold">
                 FB
               </Link>
               <Link href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-background border border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all">
-                <MapPinned className="h-4 w-4" />
+                <Globe className="h-5 w-5" />
               </Link>
             </div>
           </div>

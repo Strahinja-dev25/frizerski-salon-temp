@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { getUserByClerkId, getAllStaff } from "@/services/staff-service";
+import { getUserByClerkId, getAllUsers } from "@/services/staff-service";
 import { StaffTable } from "@/components/dashboard/staff-table";
 
 export const revalidate = 0; // Ensures data is always fresh
@@ -18,7 +18,7 @@ export default async function RadniciPage() {
     );
   }
 
-  const staffList = await getAllStaff();
+  const staffList = await getAllUsers();
 
   return (
     <div className="flex flex-col gap-8">

@@ -108,6 +108,10 @@
   --ring: oklch(0.5 0.01 265);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

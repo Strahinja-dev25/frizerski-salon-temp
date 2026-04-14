@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
 import { srLatn } from "date-fns/locale";
-import { Clock, Calendar as CalendarIcon, Scissors, AlertCircle, ArrowLeft, Trash2 } from "lucide-react";
+import { Clock, Calendar as CalendarIcon, Scissors, AlertCircle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { deletePendingAppointment } from "@/services/booking-service";
+import { CancelButton } from "@/components/public/cancel-button";
 
 export const metadata: Metadata = {
   title: "Status Termina - TestFriz Salon",
@@ -140,11 +141,7 @@ export default async function StatusPage({
                                          <form action="/status" method="GET">
                                             <input type="hidden" name="email" value={email} />
                                             <input type="hidden" name="cancel" value={appt.id} />
-                                            <Button type="submit" variant="destructive" size="sm" className="w-full text-xs" onClick={(e) => {
-                                               if(!confirm("Da li ste sigurni da želite da otkažete ovaj termin?")) e.preventDefault();
-                                            }}>
-                                               <Trash2 className="w-3 h-3 mr-1.5" /> Otkaži
-                                            </Button>
+                                            <CancelButton />
                                          </form>
                                       )}
                                    </div>

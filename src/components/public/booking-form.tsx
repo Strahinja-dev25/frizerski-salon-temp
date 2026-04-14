@@ -128,7 +128,7 @@ export function BookingForm({ services, staff }: BookingFormProps) {
     try {
       // Sastavljamo startTime string koji backend trazi, tj Date objekat
       const dateStr = format(selectedDate, "yyyy-MM-dd");
-      const startDateTimeStr = `${dateStr}T${selectedTime}:00`;
+      const startDateTimeStr = new Date(`${dateStr}T${selectedTime}:00`).toISOString();
       
       const payload = {
         clientName: data.clientName,

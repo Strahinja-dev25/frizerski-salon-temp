@@ -111,6 +111,22 @@ async function main() {
   }
   console.log("✅ Demo usluge kreirane:", DEMO_SERVICES.length);
 
+  // 4. Kreiranje dva testna frizera (Staff)
+  const dummyStaff = [
+    { clerkUserId: "fake_id_1_marko", name: "Marko Frizer", email: "marko@salon.rs", role: "STAFF" as const },
+    { clerkUserId: "fake_id_2_stefan", name: "Stefan Barber", email: "stefan@salon.rs", role: "STAFF" as const }
+  ];
+
+  for (const staff of dummyStaff) {
+    const existing = await prisma.user.findUnique({
+      where: { clerkUserId: staff.clerkUserId }
+    });
+    if (!existing) {
+       await prisma.user.create({ data: staff });
+    }
+  }
+  console.log("✅ Demo radnici (Frizeri) kreirani.");
+
   console.log("🎉 Seed skripta uspešno završena!");
 }
 

@@ -109,9 +109,13 @@ export function ServicesTable({ services }: { services: ServiceData[] }) {
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Upravljanje Uslugama</CardTitle>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger>
-            <Button size="sm"><Plus className="w-4 h-4 mr-2" /> Dodaj uslugu</Button>
-          </DialogTrigger>
+          <DialogTrigger
+            render={
+              <Button size="sm">
+                <Plus className="w-4 h-4 mr-2" /> Dodaj uslugu
+              </Button>
+            }
+          />
           <DialogContent className="sm:max-w-[425px] glass">
             <DialogHeader>
               <DialogTitle>Nova Usluga</DialogTitle>

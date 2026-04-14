@@ -63,8 +63,8 @@ export function StaffTable({ staff }: { staff: StaffData[] }) {
               <TableRow>
                 <TableHead>Ime i Prezime</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>Trenutna Rola</TableHead>
-                <TableHead className="text-right">Upravljanje Rolama</TableHead>
+                <TableHead>Trenutna Uloga</TableHead>
+                <TableHead className="text-right">Upravljanje Ulogama</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -93,7 +93,7 @@ export function StaffTable({ staff }: { staff: StaffData[] }) {
                        onValueChange={(val) => handleRoleChange(user.id, val as Role)}
                     >
                       <SelectTrigger className="w-[140px] ml-auto h-8 text-xs">
-                        <SelectValue placeholder="Promeni Rolu" />
+                        <SelectValue placeholder="Promeni Ulogu" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="STAFF">Frizer (STAFF)</SelectItem>

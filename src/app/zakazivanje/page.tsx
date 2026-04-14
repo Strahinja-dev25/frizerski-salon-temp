@@ -6,6 +6,8 @@ import { getAllServices } from "@/services/appointment-service";
 import { getAllStaff } from "@/services/staff-service";
 import { getSalonSettings } from "@/services/settings-service";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Zakaži Termin - TestFriz Salon",
@@ -63,10 +65,17 @@ export default async function BookingPage() {
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
             Pratite jednostavne korake i u par klikova dođite do novog izgleda.
           </p>
+          <div className="mt-6">
+            <Link href="/status">
+              <Button variant="link" className="text-primary font-bold">
+                Već ste zakazali? Proverite status termina ovde &rarr;
+              </Button>
+            </Link>
+          </div>
         </div>
-        
+
         <BookingForm services={mappedServices} staff={mappedStaff} />
-        
+
       </main>
       <Footer />
     </div>

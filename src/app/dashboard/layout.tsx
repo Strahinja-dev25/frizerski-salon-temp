@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { auth } from "@clerk/nextjs/server";
-import { getUserByClerkId } from "@/services/staff-service";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { syncUserByEmail } from "@/services/staff-service";
 import { UserButton } from "@clerk/nextjs";
 import {
   CalendarDays,
@@ -20,21 +20,48 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const { userId: clerkUserId } = await auth();
+  const clerkUser = await currentUser();
 
-  if (!clerkUserId) {
+  if (!clerkUserId || !clerkUser) {
     redirect("/sign-in");
   }
 
-  const user = await getUserByClerkId(clerkUserId);
+  // Get primary email from Clerk
+  const email = clerkUser.emailAddresses[0]?.emailAddress;
+  
+  // Try to sync/link by email if clerkUserId is not found in DB
+  const user = await syncUserByEmail(clerkUserId, email || "");
 
   if (!user) {
-    // Ako korisnik nije u bazi (admin ga nije dodao, ili nije prosao sync webhook)
+    // Whitelisting protection: User is logged into Clerk but not authorized in our DB
     return (
-      <div className="min-h-screen flex items-center justify-center bg-muted/20 pb-20">
-        <div className="text-center">
-           <h2 className="text-2xl font-bold mb-2">Nemate pristup sistemu</h2>
-           <p className="text-muted-foreground mb-4">Molimo kontaktirajte administratora da vam dodeli ulogu.</p>
-           <UserButton />
+      <div className="min-h-screen flex items-center justify-center bg-muted/20 pb-20 p-6 text-center">
+        <div className="max-w-md bg-background p-8 rounded-3xl border border-destructive/20 shadow-2xl">
+           <div className="bg-destructive/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Scissors className="w-8 h-8 text-destructive animate-pulse" />
+           </div>
+           <h2 className="text-2xl font-bold mb-4">Pristup Odbijen</h2>
+           <p className="text-muted-foreground mb-6 leading-relaxed">
+             Vaš nalog nije na "beloj listi" odobrenih radnika. Da biste dobili pristup, administrator mora da upiše vaš Clerk ID u bazu podataka.
+           </p>
+           
+           <div className="bg-muted p-4 rounded-xl mb-8 text-left">
+              <p className="text-xs uppercase font-bold text-muted-foreground mb-2">Vaš trenutni Clerk ID:</p>
+              <code className="text-sm font-mono break-all bg-background p-2 rounded block border border-border select-all">
+                 {clerkUserId}
+              </code>
+              <p className="text-[10px] mt-2 text-muted-foreground italic">* Iskopirajte ovaj kod i pošaljite administratoru ili ga sami unesite u "clerkUserId" polje u bazi.</p>
+           </div>
+
+           <div className="flex flex-col gap-3">
+              <Link href="/">
+                 <Button variant="outline" className="w-full rounded-full">Nazad na početnu</Button>
+              </Link>
+              <div className="flex items-center justify-center gap-2 pt-2">
+                 <span className="text-xs text-muted-foreground">Prijavljeni ste kao:</span>
+                 <UserButton />
+              </div>
+           </div>
         </div>
       </div>
     );

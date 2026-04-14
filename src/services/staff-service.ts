@@ -19,6 +19,35 @@ export async function getUserByClerkId(clerkUserId: string) {
   });
 }
 
+/** 
+ * Sinhronizacija po Email-u: 
+ * Ako korisnik postoji u bazi po email-u ali nema postavljen clerkUserId (ili je pogrešan),
+ * ovaj metod će ga automatski ažurirati.
+ */
+export async function syncUserByEmail(clerkUserId: string, email: string) {
+  // 1. Prvo proveri da li već imamo korisnika sa tim Clerk ID-om
+  const existingByClerkId = await db.user.findUnique({
+    where: { clerkUserId },
+  });
+
+  if (existingByClerkId) return existingByClerkId;
+
+  // 2. Ako nemamo po ID-u, traži po Email-u
+  const existingByEmail = await db.user.findFirst({
+    where: { email },
+  });
+
+  if (existingByEmail) {
+    // Našli smo ga! Ažuriraj njegov clerkUserId u bazi
+    return db.user.update({
+      where: { id: existingByEmail.id },
+      data: { clerkUserId },
+    });
+  }
+
+  return null;
+}
+
 /** Dohvata korisnika po internom ID-u */
 export async function getUserById(id: string) {
   return db.user.findUnique({
@@ -26,10 +55,17 @@ export async function getUserById(id: string) {
   });
 }
 
-/** Dohvata sve radnike (za booking stranicu — izbor frizera) */
+/** Dohvata sve korisnike (za admin tabelu) */
+export async function getAllUsers() {
+  return db.user.findMany({
+    orderBy: { name: "asc" },
+  });
+}
+
+/** Dohvata sve radnike (za booking stranicu — samo frizeri) */
 export async function getAllStaff() {
   return db.user.findMany({
-    where: { role: { in: ["ADMIN", "STAFF"] } },
+    where: { role: "STAFF" },
     select: { id: true, name: true, email: true, role: true },
     orderBy: { name: "asc" },
   });
