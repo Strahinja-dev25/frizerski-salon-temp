@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { Scissors, MapPin, MapPinned, Phone, Mail, Camera, Share2, Globe } from "lucide-react"
+import { Scissors, MapPin, Phone, Mail } from "lucide-react";
+import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -21,13 +22,13 @@ export function Footer() {
             </p>
             <div className="flex gap-4 mt-2">
               <Link href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-background border border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all">
-                <Camera className="h-5 w-5" />
+                <FaInstagram />
               </Link>
               <Link href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-background border border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all text-xs font-bold">
-                FB
+                <FaFacebook size={16} />
               </Link>
               <Link href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-background border border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all">
-                <Globe className="h-5 w-5" />
+                <FaTwitter />
               </Link>
             </div>
           </div>
