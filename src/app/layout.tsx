@@ -17,10 +17,10 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Najbolji muški frizer u Kragujevcu - TestFriz",
+  title: "TestFriz",
   description: "TestFriz je vrhunski frizerski salon gde tradicija sreće moderan stil. Rezervišite vaš termin brzo i jednostavno.",
   openGraph: {
-    title: "Najbolji muški frizer u Kragujevcu - TestFriz",
+    title: "TestFriz",
     description: "Vrhunsko muško šišanje i stilizovanje brade. Zakažite termin online jednim klikom.",
     type: "website",
     locale: "sr_RS",
