@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
+import { Analytics } from "@vercel/analytics/next"
+
 // Premium modern fonts combinations
 const inter = Inter({
   variable: "--font-inter",
@@ -44,6 +46,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Analytics />
             <Toaster />
           </ThemeProvider>
         </body>
