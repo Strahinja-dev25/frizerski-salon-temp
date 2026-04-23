@@ -92,6 +92,8 @@ export async function updateAppointmentStatusAction(
       APPROVED: "Termin je odobren.",
       REJECTED: "Termin je odbijen.",
       CANCELLED_BY_CLIENT: "Termin je otkazan.",
+      COMPLETED: "Termin je završen.",
+      CANCELLATION_REQUESTED: "Zahtev za otkazivanje je postavljen.",
     };
 
     return {
@@ -135,12 +137,10 @@ export async function cancelAppointmentByClientAction(
         return { success: true, message: "Termin je uspešno otkazan." };
       } else {
         // Manje od 18 sati — šalje se zahtev radniku
-        // Status ostaje APPROVED, ali se šalje notifikacija
-        // (za sada samo vraćamo poruku, notifikacija se implementira kasnije)
+        await updateAppointmentStatus(appointmentId, "CANCELLATION_REQUESTED");
         return {
-          success: false,
-          message:
-            "Termin ne može biti otkazan jer je do njega ostalo manje od 18 sati. Zahtev za otkazivanje je poslat frizeru.",
+          success: true,
+          message: "Termin ne može biti otkazan direktno jer je do njega ostalo manje od 18 sati. Zahtev za otkazivanje je poslat frizeru na odobrenje.",
         };
       }
     }

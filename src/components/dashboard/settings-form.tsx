@@ -11,6 +11,48 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
+function ScheduleRow({ schedule, processingDay, onSubmit }: { 
+  schedule: WorkScheduleDisplay; 
+  processingDay: string | null;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>, day: WorkScheduleDisplay) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(schedule.isOpen);
+  const [openTime, setOpenTime] = useState(schedule.openingTime);
+  const [closeTime, setCloseTime] = useState(schedule.closingTime);
+
+  return (
+    <form 
+      onSubmit={(e) => onSubmit(e, schedule)}
+      className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border rounded-xl hover:bg-muted/10 transition-colors"
+    >
+      <div className="flex items-center gap-4 min-w-[150px]">
+        <Switch 
+          id={`isOpen-${schedule.dayOfWeek}`}
+          name="isOpen"
+          checked={isOpen}
+          onCheckedChange={setIsOpen}
+        />
+        <Label htmlFor={`isOpen-${schedule.dayOfWeek}`} className="font-bold text-base min-w-[100px]">{schedule.dayName}</Label>
+      </div>
+      
+      <div className="flex items-center gap-2 flex-1 w-full sm:w-auto">
+        <Input type="time" name="openingTime" value={openTime} onChange={(e) => setOpenTime(e.target.value)} required className="w-[120px]" />
+        <span className="text-muted-foreground font-medium">-</span>
+        <Input type="time" name="closingTime" value={closeTime} onChange={(e) => setCloseTime(e.target.value)} required className="w-[120px]" />
+      </div>
+
+      <Button 
+        type="submit" 
+        variant="outline" 
+        size="sm" 
+        disabled={processingDay === schedule.dayOfWeek}
+      >
+        {processingDay === schedule.dayOfWeek ? "Čuvam..." : "Sačuvaj"}
+      </Button>
+    </form>
+  );
+}
+
 export function SettingsForm({ 
   isBookingActive, 
   schedules 
@@ -100,35 +142,12 @@ export function SettingsForm({
         <CardContent>
           <div className="grid gap-4">
              {schedules.map((schedule) => (
-                <form 
-                   key={schedule.dayOfWeek}
-                   onSubmit={(e) => handleScheduleSubmit(e, schedule)}
-                   className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border rounded-xl hover:bg-muted/10 transition-colors"
-                >
-                   <div className="flex items-center gap-4 min-w-[150px]">
-                      <Switch 
-                         id={`isOpen-${schedule.dayOfWeek}`}
-                         name="isOpen"
-                         defaultChecked={schedule.isOpen}
-                      />
-                      <Label htmlFor={`isOpen-${schedule.dayOfWeek}`} className="font-bold text-base min-w-[100px]">{schedule.dayName}</Label>
-                   </div>
-                   
-                   <div className="flex items-center gap-2 flex-1 w-full sm:w-auto">
-                      <Input type="time" name="openingTime" defaultValue={schedule.openingTime} required className="w-[120px]" />
-                      <span className="text-muted-foreground font-medium">-</span>
-                      <Input type="time" name="closingTime" defaultValue={schedule.closingTime} required className="w-[120px]" />
-                   </div>
-
-                   <Button 
-                      type="submit" 
-                      variant="outline" 
-                      size="sm" 
-                      disabled={processingDay === schedule.dayOfWeek}
-                   >
-                      {processingDay === schedule.dayOfWeek ? "Čuvam..." : "Sačuvaj"}
-                   </Button>
-                </form>
+                <ScheduleRow 
+                  key={schedule.dayOfWeek} 
+                  schedule={schedule} 
+                  processingDay={processingDay} 
+                  onSubmit={handleScheduleSubmit} 
+                />
              ))}
           </div>
         </CardContent>

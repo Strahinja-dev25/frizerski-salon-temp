@@ -72,7 +72,7 @@ export const createAppointmentSchema = z.object({
 /** Validacija za promenu statusa termina */
 export const updateAppointmentStatusSchema = z.object({
   id: z.string().min(1, "ID termina je obavezan."),
-  status: z.enum(["APPROVED", "REJECTED", "CANCELLED_BY_CLIENT"], {
+  status: z.enum(["APPROVED", "REJECTED", "CANCELLED_BY_CLIENT", "COMPLETED", "CANCELLATION_REQUESTED"], {
     error: "Neispravan status termina.",
   }),
 });

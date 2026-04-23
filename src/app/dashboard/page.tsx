@@ -23,8 +23,8 @@ export default async function DashboardPage() {
 
   // Fetch upcoming appointments
   const appointments = isAdmin
-    ? await getAllAppointments(["PENDING", "APPROVED"])
-    : await getAppointmentsByUserId(user.id, ["PENDING", "APPROVED"]);
+    ? await getAllAppointments(["PENDING", "APPROVED", "CANCELLATION_REQUESTED"])
+    : await getAppointmentsByUserId(user.id, ["PENDING", "APPROVED", "CANCELLATION_REQUESTED"]);
 
   // Ograniči na prvih 10 za danas/sutra
   const upcoming = appointments
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
       {/* RECENT APPOINTMENTS HEADER */}
       <div className="flex items-center justify-between mt-4">
         <h2 className="text-2xl font-bold font-heading">Naredni termini</h2>
-        <a href={isAdmin ? "/dashboard/termini" : "/dashboard/odmori"}>
+        <a href="/dashboard/termini">
           <Button variant="outline" size="sm" className="hidden sm:flex">
             Pregled Termina
           </Button>
@@ -116,10 +116,14 @@ export default async function DashboardPage() {
                   <div className="text-sm text-muted-foreground">
                     {format(new Date(appt.startTime), "dd. MMM yyyy.", { locale: srLatn })}
                   </div>
-                  {isPending ? (
+                  {isPending && (
                     <div className="mt-2 inline-flex border border-amber-500/20 bg-amber-500/10 text-amber-500 text-xs px-2 py-0.5 rounded-full font-bold">Na čekanju</div>
-                  ) : (
+                  )}
+                  {appt.status === "APPROVED" && (
                     <div className="mt-2 text-primary text-xs font-bold flex items-center"><CheckCircle2 className="w-3 h-3 mr-1" />Odobreno</div>
+                  )}
+                  {appt.status === "CANCELLATION_REQUESTED" && (
+                    <div className="mt-2 inline-flex border border-red-500/20 bg-red-500/10 text-red-500 text-xs px-2 py-0.5 rounded-full font-bold animate-pulse">Zahtev za otkazivanje</div>
                   )}
                 </div>
               </Card>

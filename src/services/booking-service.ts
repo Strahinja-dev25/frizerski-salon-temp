@@ -180,31 +180,31 @@ export async function getDashboardStats(userId?: string): Promise<DashboardStats
 
   const userFilter = userId ? { userId } : {};
 
-  // Današnji termini
+  // Današnji termini (APPROVED ili COMPLETED)
   const todayAppointments = await db.appointment.count({
     where: {
       ...userFilter,
-      status: "APPROVED",
+      status: { in: ["APPROVED", "COMPLETED"] },
       startTime: { gte: startOfDay, lt: endOfDay },
     },
   });
 
-  // Današnji prihod
+  // Današnji prihod (samo COMPLETED)
   const todayAppts = await db.appointment.findMany({
     where: {
       ...userFilter,
-      status: "APPROVED",
+      status: "COMPLETED",
       startTime: { gte: startOfDay, lt: endOfDay },
     },
     include: { service: { select: { price: true } } },
   });
   const todayRevenue = todayAppts.reduce((sum, a) => sum + a.service.price, 0);
 
-  // Mesečni prihod
+  // Mesečni prihod (samo COMPLETED)
   const monthAppts = await db.appointment.findMany({
     where: {
       ...userFilter,
-      status: "APPROVED",
+      status: "COMPLETED",
       startTime: { gte: startOfMonth, lt: endOfMonth },
     },
     include: { service: { select: { price: true } } },

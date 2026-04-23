@@ -12,6 +12,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { deletePendingAppointment } from "@/services/booking-service";
 import { CancelButton } from "@/components/public/cancel-button";
+import { ApprovedCancelButton } from "@/components/public/approved-cancel-button";
+import { canClientCancelDirectly } from "@/services/appointment-service";
 
 export const metadata: Metadata = {
   title: "Status Termina - TestFriz Salon",
@@ -95,60 +97,79 @@ export default async function StatusPage({
               ) : (
                  <div className="grid gap-4">
                     {appointments.map((appt) => {
-                       const isPending = appt.status === "PENDING";
-                       const isApproved = appt.status === "APPROVED";
-                       const isRejected = appt.status === "REJECTED";
-                       const isCancelledClient = appt.status === "CANCELLED_BY_CLIENT";
+                        const isPending = appt.status === "PENDING";
+                        const isApproved = appt.status === "APPROVED";
+                        const isRejected = appt.status === "REJECTED";
+                        const isCancelledClient = appt.status === "CANCELLED_BY_CLIENT";
+                        const isCancellationRequested = appt.status === "CANCELLATION_REQUESTED";
+                        const isCompleted = appt.status === "COMPLETED";
 
-                       return (
-                          <Card key={appt.id} className="overflow-hidden glass-panel">
-                             <div className={`h-2 w-full ${isPending ? 'bg-amber-400' : isApproved ? 'bg-primary' : isRejected ? 'bg-destructive' : 'bg-muted-foreground'}`} />
-                             <CardContent className="p-6">
-                                <div className="flex flex-col md:flex-row justify-between gap-6">
-                                   
-                                   <div className="flex flex-col gap-4 flex-1">
-                                      <div className="flex items-center gap-3">
-                                         <div className="bg-muted p-2 rounded-lg">
-                                            <Scissors className="w-5 h-5 text-primary" />
-                                         </div>
-                                         <div>
-                                            <h4 className="font-bold text-lg">{appt.service.name}</h4>
-                                            <p className="text-sm text-muted-foreground">Kod frizera: <span className="font-medium text-foreground">{appt.user.name}</span></p>
-                                         </div>
-                                      </div>
-                                   </div>
+                        // Provera 18h pravila za odobrene termine
+                        const canDirectCancel = isApproved ? canClientCancelDirectly(appt.startTime) : false;
 
-                                   <div className="flex flex-col gap-2 md:items-end justify-center">
-                                      <div className="flex items-center gap-2 text-foreground font-medium">
-                                         <CalendarIcon className="w-4 h-4 text-muted-foreground" />
-                                         {format(new Date(appt.startTime), "dd. MMMM yyyy.", { locale: srLatn })}
-                                      </div>
-                                      <div className="flex items-center gap-2 text-foreground font-bold text-lg">
-                                         <Clock className="w-4 h-4 text-muted-foreground" />
-                                         {format(new Date(appt.startTime), "HH:mm")}
-                                      </div>
-                                   </div>
+                        return (
+                           <Card key={appt.id} className="overflow-hidden glass-panel">
+                              <div className={`h-2 w-full ${isPending ? 'bg-amber-400' : isApproved ? 'bg-primary' : isCancellationRequested ? 'bg-amber-500' : isCompleted ? 'bg-green-500' : isRejected ? 'bg-destructive' : 'bg-muted-foreground'}`} />
+                              <CardContent className="p-6">
+                                 <div className="flex flex-col md:flex-row justify-between gap-6">
+                                    
+                                    <div className="flex flex-col gap-4 flex-1">
+                                       <div className="flex items-center gap-3">
+                                          <div className="bg-muted p-2 rounded-lg">
+                                             <Scissors className="w-5 h-5 text-primary" />
+                                          </div>
+                                          <div>
+                                             <h4 className="font-bold text-lg">{appt.service.name}</h4>
+                                             <p className="text-sm text-muted-foreground">Kod frizera: <span className="font-medium text-foreground">{appt.user.name}</span></p>
+                                          </div>
+                                       </div>
+                                    </div>
 
-                                   <div className="flex flex-col md:items-end justify-center gap-3 min-w-[140px]">
-                                      <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-background border">
-                                         {isPending && <span className="text-amber-500 flex items-center"><span className="w-2 h-2 rounded-full bg-amber-500 mr-2 animate-pulse" /> Na čekanju</span>}
-                                         {isApproved && <span className="text-primary flex items-center"><span className="w-2 h-2 rounded-full bg-primary mr-2" /> Odobren</span>}
-                                         {isRejected && <span className="text-destructive flex items-center"><span className="w-2 h-2 rounded-full bg-destructive mr-2" /> Odbijen</span>}
-                                         {isCancelledClient && <span className="text-muted-foreground flex items-center"><span className="w-2 h-2 rounded-full bg-muted-foreground mr-2" /> Otkazan</span>}
-                                      </div>
-                                      
-                                      {isPending && (
-                                         <form action="/status" method="GET">
-                                            <input type="hidden" name="email" value={email} />
-                                            <input type="hidden" name="cancel" value={appt.id} />
-                                            <CancelButton />
-                                         </form>
-                                      )}
-                                   </div>
-                                   
-                                </div>
-                             </CardContent>
-                          </Card>
+                                    <div className="flex flex-col gap-2 md:items-end justify-center">
+                                       <div className="flex items-center gap-2 text-foreground font-medium">
+                                          <CalendarIcon className="w-4 h-4 text-muted-foreground" />
+                                          {format(new Date(appt.startTime), "dd. MMMM yyyy.", { locale: srLatn })}
+                                       </div>
+                                       <div className="flex items-center gap-2 text-foreground font-bold text-lg">
+                                          <Clock className="w-4 h-4 text-muted-foreground" />
+                                          {format(new Date(appt.startTime), "HH:mm")}
+                                       </div>
+                                    </div>
+
+                                    <div className="flex flex-col md:items-end justify-center gap-3 min-w-[180px]">
+                                       <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-background border">
+                                          {isPending && <span className="text-amber-500 flex items-center"><span className="w-2 h-2 rounded-full bg-amber-500 mr-2 animate-pulse" /> Na čekanju</span>}
+                                          {isApproved && <span className="text-primary flex items-center"><span className="w-2 h-2 rounded-full bg-primary mr-2" /> Odobren</span>}
+                                          {isCancellationRequested && <span className="text-amber-500 flex items-center"><span className="w-2 h-2 rounded-full bg-amber-500 mr-2 animate-pulse" /> Zahtev poslat</span>}
+                                          {isCompleted && <span className="text-green-600 flex items-center"><span className="w-2 h-2 rounded-full bg-green-500 mr-2" /> Završen</span>}
+                                          {isRejected && <span className="text-destructive flex items-center"><span className="w-2 h-2 rounded-full bg-destructive mr-2" /> Odbijen</span>}
+                                          {isCancelledClient && <span className="text-muted-foreground flex items-center"><span className="w-2 h-2 rounded-full bg-muted-foreground mr-2" /> Otkazan</span>}
+                                       </div>
+                                       
+                                       {isPending && (
+                                          <form action="/status" method="GET">
+                                             <input type="hidden" name="email" value={email} />
+                                             <input type="hidden" name="cancel" value={appt.id} />
+                                             <CancelButton />
+                                          </form>
+                                       )}
+
+                                       {isApproved && (
+                                          <ApprovedCancelButton
+                                             appointmentId={appt.id}
+                                             clientEmail={email}
+                                             canDirectCancel={canDirectCancel}
+                                          />
+                                       )}
+
+                                       {isCancellationRequested && (
+                                          <p className="text-xs text-amber-500 italic">Čeka se odobrenje frizera</p>
+                                       )}
+                                    </div>
+                                    
+                                 </div>
+                              </CardContent>
+                           </Card>
                        );
                     })}
                  </div>

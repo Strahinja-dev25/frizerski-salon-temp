@@ -79,7 +79,8 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   ];
 
   const staffLinks = [
-    { name: "Moji Termini", href: "/dashboard", icon: CalendarDays },
+    { name: "Početna", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Moji Termini", href: "/dashboard/termini", icon: CalendarDays },
     { name: "Slobodni dani", href: "/dashboard/odmori", icon: CalendarDays },
   ];
 

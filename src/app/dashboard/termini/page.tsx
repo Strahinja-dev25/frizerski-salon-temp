@@ -17,8 +17,8 @@ export default async function TerminiPage() {
 
   // Ukoliko je Admin vidi sve aktivne termine. Ukoliko je Staff vidi samo svoje.
   const appts = isAdmin 
-      ? await getAllAppointments(["PENDING", "APPROVED"])
-      : await getAppointmentsByUserId(user.id, ["PENDING", "APPROVED"]);
+      ? await getAllAppointments(["PENDING", "APPROVED", "COMPLETED", "CANCELLATION_REQUESTED"])
+      : await getAppointmentsByUserId(user.id, ["PENDING", "APPROVED", "COMPLETED", "CANCELLATION_REQUESTED"]);
 
   return (
     <div className="flex flex-col gap-8">
