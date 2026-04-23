@@ -57,7 +57,7 @@ export function Footer() {
 
           {/* Contact */}
           <div className="col-span-1 md:col-span-2 flex flex-col gap-4">
-            <h3 className="font-heading font-semibold text-foreground text-lg">Kontakt & Odricanje</h3>
+            <h3 className="font-heading font-semibold text-foreground text-lg">Kontakt</h3>
             <ul className="flex flex-col gap-3 font-medium">
               <li className="flex items-center gap-3 text-muted-foreground text-sm">
                 <div className="bg-background p-2 rounded-md border border-border">
