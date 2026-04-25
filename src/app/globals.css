@@ -46,62 +46,67 @@
 }
 
 :root {
+  color-scheme: light;
   /* Light Theme - Clean, slightly warm for premium feel */
-  --background: oklch(0.985 0.005 280); /* Very light slate */
+  --background: oklch(0.985 0.005 280);
+  /* Very light slate */
   --foreground: oklch(0.15 0.01 280);
-  
+
   --card: oklch(1 0 0 / 0.8);
   --card-foreground: oklch(0.15 0.01 280);
-  
+
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0.01 280);
-  
+
   --primary: oklch(0.15 0.01 280);
   --primary-foreground: oklch(0.985 0 0);
-  
+
   --secondary: oklch(0.94 0.01 280);
   --secondary-foreground: oklch(0.2 0.01 280);
-  
+
   --muted: oklch(0.96 0.01 280);
   --muted-foreground: oklch(0.45 0.01 280);
-  
+
   --accent: oklch(0.94 0.01 280);
   --accent-foreground: oklch(0.15 0.01 280);
-  
+
   --destructive: oklch(0.6 0.15 20);
   --border: oklch(0.9 0.01 280);
   --input: oklch(0.9 0.01 280);
   --ring: oklch(0.15 0.01 280);
-  
-  --radius: 0.75rem; /* Larger radius for modern feel */
+
+  --radius: 0.75rem;
+  /* Larger radius for modern feel */
 }
 
 .dark {
+  color-scheme: dark;
   /* Dark Theme - Deep slate/navy as requested */
-  --background: oklch(0.18 0.02 265); /* Deep slate/blue like slate-950 */
+  --background: oklch(0.18 0.02 265);
+  /* Deep slate/blue like slate-950 */
   --foreground: oklch(0.95 0 0);
-  
+
   /* Glassmorphism Card base */
-  --card: oklch(0.22 0.02 265 / 0.4); 
+  --card: oklch(0.22 0.02 265 / 0.4);
   --card-foreground: oklch(0.95 0 0);
-  
+
   --popover: oklch(0.20 0.02 265);
   --popover-foreground: oklch(0.95 0 0);
-  
+
   --primary: oklch(0.95 0 0);
   --primary-foreground: oklch(0.20 0.02 265);
-  
+
   --secondary: oklch(0.25 0.02 265);
   --secondary-foreground: oklch(0.95 0 0);
-  
+
   --muted: oklch(0.25 0.02 265);
   --muted-foreground: oklch(0.7 0.01 265);
-  
+
   --accent: oklch(0.28 0.02 265);
   --accent-foreground: oklch(0.95 0 0);
-  
+
   --destructive: oklch(0.6 0.15 20);
-  
+
   /* Thin white border for glass effect */
   --border: oklch(1 0 0 / 0.1);
   --input: oklch(1 0 0 / 0.1);
@@ -116,9 +121,11 @@ html {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
@@ -129,12 +136,15 @@ html {
   .glass {
     @apply bg-card backdrop-blur-md border border-white/10 shadow-xl;
   }
+
   .glass-panel {
     @apply bg-background/60 backdrop-blur-xl border border-white/5;
   }
+
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/60;
   }
+
   .text-gradient-primary {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60;
   }

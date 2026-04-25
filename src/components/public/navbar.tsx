@@ -5,7 +5,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, Scissors } from "lucide-react"
 import { useAuth, UserButton } from "@clerk/nextjs"
-import { motion } from "framer-motion"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -35,11 +34,10 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm py-3"
-          : "bg-transparent py-5"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm py-3"
+        : "bg-transparent py-5"
+        }`}
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
         {/* Logo */}
@@ -58,9 +56,8 @@ export function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-muted ${
-                  isActive ? "text-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
-                }`}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-muted ${isActive ? "text-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
+                  }`}
               >
                 {item.name}
               </Link>
@@ -71,7 +68,7 @@ export function Navbar() {
         {/* Right Actions */}
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          
+
           {isLoaded && (
             <div className="hidden sm:block">
               {!isSignedIn ? (
@@ -107,7 +104,7 @@ export function Navbar() {
               <Menu className="h-5 w-5" />
               <span className="sr-only">Toggle menu</span>
             </SheetTrigger>
-            <SheetContent side="right" className="glass border-l-border/30 w-[80vw] sm:max-w-sm">
+            <SheetContent side="right" className="bg-background/50 backdrop-blur-sm border-l-border/30 w-[80vw] sm:max-w-sm">
               <div className="flex flex-col h-full gap-6 mt-8">
                 <nav className="flex flex-col gap-2">
                   {navigation.map((item) => (
