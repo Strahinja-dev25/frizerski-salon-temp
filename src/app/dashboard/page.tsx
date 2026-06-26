@@ -41,30 +41,30 @@ export default async function DashboardPage() {
 
       {/* STATS KARTICE */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="glass-panel">
+        <Card className="glass-panel bg-card shadow-sm border border-black/80 dark:border-white/10">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Današnji Prihod</CardTitle>
-            <DollarSign className="w-4 h-4 text-muted-foreground" />
+            <DollarSign className="w-4 h-4 text-green-500" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-foreground">{stats.todayRevenue.toLocaleString('sr-RS')} <span className="text-lg text-muted-foreground font-medium">RSD</span></div>
           </CardContent>
         </Card>
 
-        <Card className="glass-panel">
+        <Card className="glass-panel bg-card shadow-sm border border-black/80 dark:border-white/10">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Mesečni Prihod</CardTitle>
-            <DollarSign className="w-4 h-4 text-primary" />
+            <DollarSign className="w-4 h-4 text-green-500" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-foreground">{stats.monthRevenue.toLocaleString('sr-RS')} <span className="text-lg text-muted-foreground font-medium">RSD</span></div>
           </CardContent>
         </Card>
 
-        <Card className="glass-panel">
+        <Card className="glass-panel bg-card shadow-sm border border-black/80 dark:border-white/10">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Današnji Termini</CardTitle>
-            <Users className="w-4 h-4 text-muted-foreground" />
+            <Users className="w-4 h-4 text-blue-500" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-foreground">{stats.todayAppointments}</div>
@@ -83,7 +83,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* APPOINTMENTS LIST */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 glass-panel rounded-xl shadow-sm">
         {upcoming.length === 0 ? (
           <Card className="glass-panel border-dashed border-2">
             <CardContent className="p-12 text-center flex flex-col items-center justify-center">

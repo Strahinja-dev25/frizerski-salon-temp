@@ -54,25 +54,25 @@ export function AppointmentsTable({ appointments, isAdmin }: { appointments: App
   };
 
   return (
-    <Card className="glass-panel overflow-hidden">
+    <Card className="glass-panel overflow-hidden shadow-sm border border-black/80 dark:border-white/10">
       <CardHeader>
         <CardTitle>Svi Termini</CardTitle>
       </CardHeader>
       <CardContent className="p-0 overflow-x-auto">
         {appointments.length === 0 ? (
           <div className="p-8 text-center text-muted-foreground border-2 border-dashed rounded-xl m-4">
-            Trenutno nema zakazanih termina.
+            Trenutno nema nikakvih termina.
           </div>
         ) : (
           <Table>
             <TableHeader className="bg-muted/50">
               <TableRow>
-                <TableHead className="w-[200px]">Klijent</TableHead>
+                <TableHead className="w-[200px] pl-4">Klijent</TableHead>
                 <TableHead>Usluga</TableHead>
                 {isAdmin && <TableHead>Frizer</TableHead>}
                 <TableHead>Vreme</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Akcije</TableHead>
+                <TableHead className="text-right pr-4">Akcije</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -81,10 +81,10 @@ export function AppointmentsTable({ appointments, isAdmin }: { appointments: App
                 const isApproved = appt.status === "APPROVED";
                 const isCompleted = appt.status === "COMPLETED";
                 const isCancellationRequested = appt.status === "CANCELLATION_REQUESTED";
-                
+
                 return (
                   <TableRow key={appt.id} className={isPending ? "bg-amber-500/5 hover:bg-amber-500/10" : isCancellationRequested ? "bg-red-500/5 border-l-4 border-l-red-500 hover:bg-red-500/10" : ""}>
-                    <TableCell>
+                    <TableCell className="pl-4">
                       <div className="flex flex-col">
                         <span className="font-bold">{appt.clientName}</span>
                         <span className="text-xs text-muted-foreground">{appt.clientPhone}</span>
@@ -98,7 +98,7 @@ export function AppointmentsTable({ appointments, isAdmin }: { appointments: App
                     </TableCell>
                     {isAdmin && (
                       <TableCell>
-                         <span className="text-sm flex items-center"><UserIcon className="w-3 h-3 mr-1" /> {appt.user.name}</span>
+                        <span className="text-sm flex items-center"><UserIcon className="w-3 h-3 mr-1" /> {appt.user.name}</span>
                       </TableCell>
                     )}
                     <TableCell>
@@ -126,72 +126,72 @@ export function AppointmentsTable({ appointments, isAdmin }: { appointments: App
                     <TableCell className="text-right">
                       {isPending && (
                         <div className="flex items-center justify-end gap-2">
-                           <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="border-green-500 text-green-600 hover:bg-green-500/10 hover:text-green-600"
-                              onClick={() => handleStatusChange(appt.id, "APPROVED")}
-                              disabled={processingId === appt.id}
-                           >
-                              <Check className="w-4 h-4 mr-1" /> Odobri
-                           </Button>
-                           <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="border-red-500 text-red-600 hover:bg-red-500/10 hover:text-red-600"
-                              onClick={() => handleStatusChange(appt.id, "REJECTED")}
-                              disabled={processingId === appt.id}
-                           >
-                              <X className="w-4 h-4 mr-1" /> Odbij
-                           </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-green-500 text-green-600 hover:bg-green-500/10 hover:text-green-600"
+                            onClick={() => handleStatusChange(appt.id, "APPROVED")}
+                            disabled={processingId === appt.id}
+                          >
+                            <Check className="w-4 h-4 mr-1" /> Odobri
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-red-500 text-red-600 hover:bg-red-500/10 hover:text-red-600 pr-4"
+                            onClick={() => handleStatusChange(appt.id, "REJECTED")}
+                            disabled={processingId === appt.id}
+                          >
+                            <X className="w-4 h-4 mr-1" /> Odbij
+                          </Button>
                         </div>
                       )}
-                      
+
                       {isApproved && (
-                         <div className="flex items-center justify-end gap-2">
-                           <Button 
-                              variant="default" 
-                              size="sm" 
-                              className="bg-green-600 hover:bg-green-700 text-white"
-                              onClick={() => handleStatusChange(appt.id, "COMPLETED")}
-                              disabled={processingId === appt.id}
-                           >
-                              <Check className="w-4 h-4 mr-1" /> Završi termin
-                           </Button>
-                           <Button 
-                              variant="destructive" 
-                              size="sm" 
-                              onClick={() => {
-                                 if(confirm("Da li ste sigurni da želite da otkažete odobren termin? Klijent će izgubiti rezervaciju.")) {
-                                    handleStatusChange(appt.id, "REJECTED")
-                                 }
-                              }}
-                              disabled={processingId === appt.id}
-                           >
-                              Otkaži termin
-                           </Button>
-                         </div>
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="default"
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                            onClick={() => handleStatusChange(appt.id, "COMPLETED")}
+                            disabled={processingId === appt.id}
+                          >
+                            <Check className="w-4 h-4 mr-1" /> Završi termin
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => {
+                              if (confirm("Da li ste sigurni da želite da otkažete odobren termin? Klijent će izgubiti rezervaciju.")) {
+                                handleStatusChange(appt.id, "REJECTED")
+                              }
+                            }}
+                            disabled={processingId === appt.id}
+                          >
+                            Otkaži termin
+                          </Button>
+                        </div>
                       )}
 
                       {isCancellationRequested && (
-                         <div className="flex items-center justify-end gap-2">
-                           <Button 
-                              variant="destructive" 
-                              size="sm" 
-                              onClick={() => handleStatusChange(appt.id, "CANCELLED_BY_CLIENT")}
-                              disabled={processingId === appt.id}
-                           >
-                              <Check className="w-4 h-4 mr-1" /> Odobri Otkazivanje
-                           </Button>
-                           <Button 
-                              variant="outline" 
-                              size="sm" 
-                              onClick={() => handleStatusChange(appt.id, "APPROVED")}
-                              disabled={processingId === appt.id}
-                           >
-                              <X className="w-4 h-4 mr-1" /> Zadrži Termin
-                           </Button>
-                         </div>
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleStatusChange(appt.id, "CANCELLED_BY_CLIENT")}
+                            disabled={processingId === appt.id}
+                          >
+                            <Check className="w-4 h-4 mr-1" /> Odobri Otkazivanje
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleStatusChange(appt.id, "APPROVED")}
+                            disabled={processingId === appt.id}
+                          >
+                            <X className="w-4 h-4 mr-1" /> Zadrži Termin
+                          </Button>
+                        </div>
                       )}
                     </TableCell>
                   </TableRow>

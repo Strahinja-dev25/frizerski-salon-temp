@@ -20,15 +20,16 @@ export function Footer() {
             <p className="text-muted-foreground text-sm leading-relaxed mt-2">
               Vrhunski frizerski salon gde tradicija sreće moderan stil. Naš cilj je da svaki klijent izađe sa osmehom na licu i savršenom frizurom.
             </p>
+            {/* Ikonice drustvenih mreza */}
             <div className="flex gap-4 mt-2">
-              <Link href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-background border border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all">
-                <FaInstagram />
+              <Link href="#" className="text-foreground/60 hover:text-primary hover:shadow-[0_0_15px_8px_rgba(var(--primary),0.3)] transition-all">
+                <FaInstagram size={32} />
               </Link>
-              <Link href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-background border border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all text-xs font-bold">
-                <FaFacebook size={16} />
+              <Link href="#" className="text-foreground/60 hover:text-primary hover:shadow-[0_0_15px_8px_rgba(var(--primary),0.3)] transition-all">
+                <FaFacebook size={32} />
               </Link>
-              <Link href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-background border border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all">
-                <FaTwitter />
+              <Link href="#" className="text-foreground/60 hover:text-primary hover:shadow-[0_0_15px_8px_rgba(var(--primary),0.3)] transition-all">
+                <FaTwitter size={32} />
               </Link>
             </div>
           </div>
