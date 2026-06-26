@@ -4,19 +4,11 @@ import Link from "next/link";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { syncUserByEmail } from "@/services/staff-service";
 import { UserButton } from "@clerk/nextjs";
-import {
-  CalendarDays,
-  LayoutDashboard,
-  Scissors,
-  Settings,
-  Users,
-  LogOut,
-  Home,
-  Menu
-} from "lucide-react";
+import { Home, Menu, Scissors } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
+import SidebarLinks from "@/components/dashboard/SidebarLinks";
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const { userId: clerkUserId } = await auth();
@@ -69,25 +61,8 @@ export default async function DashboardLayout({ children }: { children: ReactNod
 
   const isAdmin = user.role === "ADMIN";
 
-  const adminLinks = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Svi Termini", href: "/dashboard/termini", icon: CalendarDays },
-    { name: "Odobravanje/Odmori", href: "/dashboard/odmori", icon: CalendarDays },
-    { name: "Usluge", href: "/dashboard/usluge", icon: Scissors },
-    { name: "Radnici", href: "/dashboard/radnici", icon: Users },
-    { name: "Podešavanja", href: "/dashboard/podesavanja", icon: Settings },
-  ];
-
-  const staffLinks = [
-    { name: "Početna", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Moji Termini", href: "/dashboard/termini", icon: CalendarDays },
-    { name: "Slobodni dani", href: "/dashboard/odmori", icon: CalendarDays },
-  ];
-
-  const links = isAdmin ? adminLinks : staffLinks;
-
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-background border-r border-border w-64 p-4 shrink-0 shadow-sm">
+    <div className="flex flex-col h-full bg-background p-4 w-full">
       <div className="flex items-center gap-2 mb-8 px-2 py-4 border-b border-border">
         <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
           <Scissors className="h-5 w-5" />
@@ -96,17 +71,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       </div>
 
       <nav className="flex-1 flex flex-col gap-2">
-        {links.map((link) => {
-          const Icon = link.icon;
-          return (
-            <Link key={link.name} href={link.href}>
-              <Button variant="ghost" className="w-full justify-start gap-3 mb-1 text-muted-foreground hover:text-foreground">
-                <Icon className="w-4 h-4" />
-                <span>{link.name}</span>
-              </Button>
-            </Link>
-          );
-        })}
+        <SidebarLinks isAdmin={isAdmin} />
       </nav>
 
       <div className="mt-auto border-t border-border pt-4 px-2 space-y-4">
@@ -133,7 +98,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
     <div className="flex h-screen bg-muted/20 overflow-hidden">
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:block">
+      <div className="hidden md:block w-64 h-full border-r border-border shadow-sm bg-background">
         {sidebarContent}
       </div>
 
@@ -149,7 +114,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           <SheetTrigger className="shrink-0 flex items-center justify-center w-10 h-10 hover:bg-muted rounded-full transition-colors">
             <Menu className="w-5 h-5" />
           </SheetTrigger>
-          <SheetContent side="left" className="p-0 w-64">
+          <SheetContent side="left" className="p-0 w-72 max-w-[16rem]">
             {sidebarContent}
           </SheetContent>
         </Sheet>
