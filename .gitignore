@@ -51,3 +51,9 @@ prisma/migrations/*.sql
 
 # OS
 Thumbs.db
+
+# Scratch / temp files (AI working directory)
+/scratch
+
+# Internal dev notes and reference images
+/docs

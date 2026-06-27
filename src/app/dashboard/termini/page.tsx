@@ -15,10 +15,11 @@ export default async function TerminiPage() {
 
   const isAdmin = user.role === "ADMIN";
 
-  // Ukoliko je Admin vidi sve aktivne termine. Ukoliko je Staff vidi samo svoje.
-  const appts = isAdmin 
-      ? await getAllAppointments(["PENDING", "APPROVED", "COMPLETED", "CANCELLATION_REQUESTED"])
-      : await getAppointmentsByUserId(user.id, ["PENDING", "APPROVED", "COMPLETED", "CANCELLATION_REQUESTED"]);
+  // Admin vidi poslednjih 30 termina svih statusa, Staff vidi svojih 30
+  const allStatuses = ["PENDING", "APPROVED", "COMPLETED", "CANCELLATION_REQUESTED", "CANCELLED_BY_CLIENT", "REJECTED"] as const;
+  const appts = isAdmin
+      ? await getAllAppointments([...allStatuses])
+      : await getAppointmentsByUserId(user.id, [...allStatuses]);
 
   return (
     <div className="flex flex-col gap-8">

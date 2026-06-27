@@ -87,8 +87,8 @@ export function Footer() {
             &copy; {currentYear} TestFriz Salon. All rights reserved.
           </p>
           <div className="flex gap-4 text-xs text-muted-foreground">
-            <Link href="#" className="hover:text-foreground transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-foreground transition-colors">Terms of Service</Link>
+            <Link href="/politika-privatnosti" className="hover:text-foreground transition-colors">Politika privatnosti</Link>
+            <Link href="/uslovi-koriscenja" className="hover:text-foreground transition-colors">Uslovi korišćenja</Link>
           </div>
         </div>
       </div>

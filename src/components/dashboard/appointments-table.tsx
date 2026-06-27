@@ -34,6 +34,15 @@ type AppointmentData = {
 export function AppointmentsTable({ appointments, isAdmin }: { appointments: AppointmentData[]; isAdmin: boolean }) {
   const router = useRouter();
   const [processingId, setProcessingId] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>("SVE");
+  const [visibleCount, setVisibleCount] = useState<number>(30);
+
+  const filteredAppointments = statusFilter === "SVE"
+    ? appointments
+    : appointments.filter((a) => a.status === statusFilter);
+
+  const visibleAppointments = filteredAppointments.slice(0, visibleCount);
+  const hasMore = filteredAppointments.length > visibleCount;
 
   const handleStatusChange = async (id: string, newStatus: AppointmentStatus) => {
     setProcessingId(id);
@@ -55,13 +64,26 @@ export function AppointmentsTable({ appointments, isAdmin }: { appointments: App
 
   return (
     <Card className="glass-panel overflow-hidden shadow-sm border border-black/80 dark:border-white/10">
-      <CardHeader>
-        <CardTitle>Svi Termini</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between gap-4 flex-wrap">
+        <CardTitle>{isAdmin ? "Svi Termini" : "Moji Termini"}</CardTitle>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="text-center text-sm rounded-lg border border-border bg-background px-3 py-1.5 text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          <option value="SVE">Svi termini</option>
+          <option value="PENDING">Na čekanju</option>
+          <option value="APPROVED">Odobreni</option>
+          <option value="COMPLETED">Završeni</option>
+          <option value="REJECTED">Odbijeni</option>
+          <option value="CANCELLED_BY_CLIENT">Otkazao klijent</option>
+          <option value="CANCELLATION_REQUESTED">Zahtev za otkazivanje</option>
+        </select>
       </CardHeader>
       <CardContent className="p-0 overflow-x-auto">
-        {appointments.length === 0 ? (
+        {filteredAppointments.length === 0 ? (
           <div className="p-8 text-center text-muted-foreground border-2 border-dashed rounded-xl m-4">
-            Trenutno nema nikakvih termina.
+            Nema termina za izabrani filter.
           </div>
         ) : (
           <Table>
@@ -76,7 +98,7 @@ export function AppointmentsTable({ appointments, isAdmin }: { appointments: App
               </TableRow>
             </TableHeader>
             <TableBody>
-              {appointments.map((appt) => {
+              {visibleAppointments.map((appt) => {
                 const isPending = appt.status === "PENDING";
                 const isApproved = appt.status === "APPROVED";
                 const isCompleted = appt.status === "COMPLETED";
@@ -201,6 +223,22 @@ export function AppointmentsTable({ appointments, isAdmin }: { appointments: App
           </Table>
         )}
       </CardContent>
+      {filteredAppointments.length > 0 && (
+        <div className="flex items-center justify-between px-6 py-4 border-t border-border">
+          <span className="text-sm text-muted-foreground">
+            Prikazano <span className="font-semibold text-foreground">{Math.min(visibleCount, filteredAppointments.length)}</span> od <span className="font-semibold text-foreground">{filteredAppointments.length}</span> termina
+          </span>
+          {hasMore && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setVisibleCount((prev) => prev + 30)}
+            >
+              Učitaj još 30
+            </Button>
+          )}
+        </div>
+      )}
     </Card>
   );
 }

@@ -47,7 +47,7 @@ export async function createAppointment(data: CreateAppointmentData) {
 // Čitanje termina
 // ---------------------------------------------------------------------------
 
-/** Dohvata termine za radnika (za dashboard) */
+/** Dohvata maksimalno 200 poslednjih termina za radnika (za dashboard) */
 export async function getAppointmentsByUserId(
   userId: string,
   statusFilter?: AppointmentStatus[]
@@ -61,11 +61,12 @@ export async function getAppointmentsByUserId(
       user: { select: { id: true, name: true, email: true } },
       service: { select: { id: true, name: true, price: true, durationMinutes: true } },
     },
-    orderBy: { startTime: "asc" },
+    orderBy: { startTime: "desc" },
+    take: 200,
   });
 }
 
-/** Dohvata sve termine (za admin dashboard) */
+/** Dohvata maksimalno 200 poslednjih termina (za admin dashboard) */
 export async function getAllAppointments(
   statusFilter?: AppointmentStatus[]
 ): Promise<AppointmentWithRelations[]> {
@@ -75,7 +76,8 @@ export async function getAllAppointments(
       user: { select: { id: true, name: true, email: true } },
       service: { select: { id: true, name: true, price: true, durationMinutes: true } },
     },
-    orderBy: { startTime: "asc" },
+    orderBy: { startTime: "desc" },
+    take: 200,
   });
 }
 
