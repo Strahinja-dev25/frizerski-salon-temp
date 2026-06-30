@@ -34,6 +34,12 @@ import {
   createTimeOff,
   deleteTimeOff,
 } from "@/services/staff-service";
+import {
+  sendAppointmentApprovedEmail,
+  sendAppointmentRejectedEmail,
+  sendCancellationConfirmationEmail,
+  sendCancellationRequestedEmail,
+} from "@/lib/email-service";
 import type { ApiResponse, Role } from "@/types";
 
 // ---------------------------------------------------------------------------
@@ -86,7 +92,25 @@ export async function updateAppointmentStatusAction(
       }
     }
 
+    // Dohvati termin da bi imali podatke za mejl (pre ili posle update-a)
+    const appointmentForEmail = await getAppointmentById(id);
     await updateAppointmentStatus(id, status);
+
+    // Mejlovi klijentu na osnovu novog statusa — void = ne blokira odgovor
+    if (appointmentForEmail) {
+      const emailData = {
+        clientName: appointmentForEmail.clientName,
+        clientEmail: appointmentForEmail.clientEmail,
+        serviceName: appointmentForEmail.service.name,
+        staffName: appointmentForEmail.user.name,
+        startTime: appointmentForEmail.startTime,
+        endTime: appointmentForEmail.endTime,
+        price: appointmentForEmail.service.price,
+      };
+
+      if (status === "APPROVED") void sendAppointmentApprovedEmail(emailData);
+      if (status === "REJECTED") void sendAppointmentRejectedEmail(emailData);
+    }
 
     const statusMessages: Record<string, string> = {
       APPROVED: "Termin je odobren.",
@@ -126,6 +150,16 @@ export async function cancelAppointmentByClientAction(
     // Ako je PENDING — može direktno obrisati
     if (appointment.status === "PENDING") {
       await deletePendingAppointment(appointmentId);
+      // Mejl o otkazivanju
+      void sendCancellationConfirmationEmail({
+        clientName: appointment.clientName,
+        clientEmail: appointment.clientEmail,
+        serviceName: appointment.service.name,
+        staffName: appointment.user.name,
+        startTime: appointment.startTime,
+        endTime: appointment.endTime,
+        price: appointment.service.price,
+      });
       return { success: true, message: "Termin je uspešno otkazan." };
     }
 
@@ -134,10 +168,28 @@ export async function cancelAppointmentByClientAction(
       if (canClientCancelDirectly(appointment.startTime)) {
         // Više od 18 sati do termina — direktno otkaži
         await updateAppointmentStatus(appointmentId, "CANCELLED_BY_CLIENT");
+        void sendCancellationConfirmationEmail({
+          clientName: appointment.clientName,
+          clientEmail: appointment.clientEmail,
+          serviceName: appointment.service.name,
+          staffName: appointment.user.name,
+          startTime: appointment.startTime,
+          endTime: appointment.endTime,
+          price: appointment.service.price,
+        });
         return { success: true, message: "Termin je uspešno otkazan." };
       } else {
         // Manje od 18 sati — šalje se zahtev radniku
         await updateAppointmentStatus(appointmentId, "CANCELLATION_REQUESTED");
+        void sendCancellationRequestedEmail({
+          clientName: appointment.clientName,
+          clientEmail: appointment.clientEmail,
+          serviceName: appointment.service.name,
+          staffName: appointment.user.name,
+          startTime: appointment.startTime,
+          endTime: appointment.endTime,
+          price: appointment.service.price,
+        });
         return {
           success: true,
           message: "Termin ne može biti otkazan direktno jer je do njega ostalo manje od 18 sati. Zahtev za otkazivanje je poslat frizeru na odobrenje.",

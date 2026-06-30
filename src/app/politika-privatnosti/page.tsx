@@ -101,18 +101,34 @@ export default function PolitikaPrivatnostiPage() {
 
             <section className="flex flex-col gap-3">
               <h2 className="font-heading text-2xl font-bold">
-                4. Marketing i komunikacija
+                4. Automatska obaveštenja putem e-maila
               </h2>
               <div className="w-12 h-1 bg-primary rounded-full" />
               <p className="text-muted-foreground leading-relaxed">
-                Vaše kontakt podatke (e-mail i telefon) koristimo isključivo za
-                slanje automatskih obaveštenja vezanih za vaš termin (potvrda
-                zakazivanja, podsetnik, obaveštenje o promeni statusa). Vaše
-                podatke <strong>ne koristimo</strong> za slanje promotivnih poruka,
-                newsletter-a, popusta ni bilo koje druge marketinške komunikacije
-                bez vašeg izričitog pristanka. Ukoliko u budućnosti uvedemo
-                newsletter, prijava će biti isključivo dobrovoljna i uz jasnu
-                mogućnost odjave.
+                Nakon zakazivanja termina, vaša e-mail adresa se koristi
+                isključivo za slanje sledećih <strong>automatskih transakcionih
+                obaveštenja</strong> vezanih za vaš termin:
+              </p>
+              <ul className="flex flex-col gap-2 ml-4">
+                {[
+                  "Potvrda da je termin odobren od strane frizera",
+                  "Obaveštenje u slučaju da termin nije mogao biti odobren",
+                  "Potvrda otkazivanja termina",
+                  "Jutarnji podsetnik na dan termina (oko 6:00)",
+                  "Obaveštenje o statusu zahteva za otkazivanje",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-muted-foreground">
+                    <div className="h-2 w-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="text-muted-foreground leading-relaxed">
+                Ova obaveštenja su <strong>isključivo transakcione prirode</strong> —
+                šalju se samo u vezi sa vašim konkretnim terminom i ne predstavljaju
+                marketinšku komunikaciju. Vaše podatke <strong>ne koristimo</strong> za
+                slanje promotivnih poruka, newsletter-a ni popusta bez vašeg izričitog
+                pristanka.
               </p>
             </section>
 

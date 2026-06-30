@@ -237,3 +237,27 @@ export async function deleteOldAppointments(): Promise<number> {
 
   return result.count;
 }
+
+/** Dohvata sve ODOBRENE termine za danas — koristi cron za slanje podsetnika */
+export async function getTodayApprovedAppointments() {
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
+
+  return db.appointment.findMany({
+    where: {
+      status: "APPROVED",
+      startTime: {
+        gte: todayStart,
+        lte: todayEnd,
+      },
+    },
+    include: {
+      user: { select: { id: true, name: true, email: true } },
+      service: { select: { id: true, name: true, price: true, durationMinutes: true } },
+    },
+    orderBy: { startTime: "asc" },
+  });
+}
