@@ -128,11 +128,11 @@ export default async function StatusPage({
                                     <div className="flex flex-col gap-2 md:items-end justify-center">
                                        <div className="flex items-center gap-2 text-foreground font-medium">
                                           <CalendarIcon className="w-4 h-4 text-muted-foreground" />
-                                          {format(new Date(appt.startTime), "dd. MMMM yyyy.", { locale: srLatn })}
+                                          {new Date(appt.startTime).toLocaleString("sr-Latn-RS", { timeZone: "Europe/Belgrade", day: "2-digit", month: "long", year: "numeric" }) + "."}
                                        </div>
                                        <div className="flex items-center gap-2 text-foreground font-bold text-lg">
                                           <Clock className="w-4 h-4 text-muted-foreground" />
-                                          {format(new Date(appt.startTime), "HH:mm")}
+                                          {new Date(appt.startTime).toLocaleString("sr-Latn-RS", { timeZone: "Europe/Belgrade", hour: "2-digit", minute: "2-digit" })}
                                        </div>
                                     </div>
 
