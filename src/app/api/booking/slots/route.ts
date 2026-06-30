@@ -65,8 +65,9 @@ export async function GET(request: Request) {
     let currentSlot = parse(schedule.openingTime, "HH:mm", targetDate);
     const closeTime = parse(schedule.closingTime, "HH:mm", targetDate);
     
-    // Ograničenje: Ne može se zakazati u prošlosti
-    const now = new Date();
+    // Ograničenje: Ne može se zakazati u prošlosti (pretvoreno u BG vreme)
+    const belgradeNowStr = new Date().toLocaleString("en-US", { timeZone: "Europe/Belgrade" });
+    const now = new Date(belgradeNowStr);
 
     while (addMinutes(currentSlot, durationMin) <= closeTime) {
       const slotStart = currentSlot;
