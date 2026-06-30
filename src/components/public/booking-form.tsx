@@ -78,7 +78,8 @@ export function BookingForm({ services, staff }: BookingFormProps) {
       try {
         const dateStr = format(selectedDate, "yyyy-MM-dd");
         const res = await fetch(
-          `/api/booking/slots?date=${dateStr}&staffId=${selectedStaff.id}&duration=${selectedService.durationMinutes}`
+          `/api/booking/slots?date=${dateStr}&staffId=${selectedStaff.id}&duration=${selectedService.durationMinutes}`,
+          { cache: "no-store" }
         );
         
         if (res.ok) {

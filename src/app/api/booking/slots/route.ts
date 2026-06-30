@@ -4,6 +4,8 @@ import { getAppointmentsByUserId } from "@/services/booking-service";
 import { getAllWorkSchedules, getWorkScheduleByDay } from "@/services/settings-service";
 import { format, parse, addMinutes, isBefore, startOfDay, endOfDay } from "date-fns";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const dateStr = searchParams.get("date");
@@ -49,7 +51,7 @@ export async function GET(request: Request) {
     const appointments = await db.appointment.findMany({
       where: {
         userId: staffId,
-        status: { in: ["APPROVED", "PENDING"] },
+        status: { in: ["APPROVED", "PENDING", "CANCELLATION_REQUESTED"] },
         startTime: {
           gte: startOfDay(targetDate),
           lt: endOfDay(targetDate),

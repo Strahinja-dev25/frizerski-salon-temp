@@ -152,7 +152,7 @@ export async function hasOverlappingAppointment(
   const overlapping = await db.appointment.findFirst({
     where: {
       userId,
-      status: { in: ["PENDING", "APPROVED"] },
+      status: { in: ["PENDING", "APPROVED", "CANCELLATION_REQUESTED"] },
       ...(excludeId ? { id: { not: excludeId } } : {}),
       OR: [
         {
