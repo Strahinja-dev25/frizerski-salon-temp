@@ -229,13 +229,13 @@ export default async function HomePage() {
                     <div className="bg-primary/20 p-3 rounded-2xl flex-shrink-0">
                       <Clock className="w-6 h-6 text-primary" />
                     </div>
-                    <div>
+                    <div className="flex-1 w-full">
                       <h4 className="font-bold text-lg mb-4">Radno Vreme</h4>
-                      <div className="flex flex-col gap-2 w-full max-w-sm">
+                      <div className="flex flex-col gap-2 w-full">
                         {schedules.map((schedule) => (
-                          <div key={schedule.dayOfWeek} className="flex justify-between items-center py-2 border-b border-border/50 last:border-0 gap-20">
+                          <div key={schedule.dayOfWeek} className="flex justify-between items-center py-2 border-b border-border/50 last:border-0 gap-4">
                             <span className="font-medium text-muted-foreground">{schedule.dayName}</span>
-                            <span className="font-bold">
+                            <span className="font-bold text-right whitespace-nowrap">
                               {schedule.isOpen ? `${schedule.openingTime} - ${schedule.closingTime}` : <span className="text-destructive">Zatvoreno</span>}
                             </span>
                           </div>
