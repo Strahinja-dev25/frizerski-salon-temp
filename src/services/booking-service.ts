@@ -220,24 +220,6 @@ export async function getDashboardStats(userId?: string): Promise<DashboardStats
   };
 }
 
-// ---------------------------------------------------------------------------
-// Cleanup — brisanje starih termina (poziva se iz cron job-a)
-// ---------------------------------------------------------------------------
-
-/** Briše sve termine starije od 20 dana */
-export async function deleteOldAppointments(): Promise<number> {
-  const twentyDaysAgo = new Date();
-  twentyDaysAgo.setDate(twentyDaysAgo.getDate() - 20);
-
-  const result = await db.appointment.deleteMany({
-    where: {
-      endTime: { lt: twentyDaysAgo },
-    },
-  });
-
-  return result.count;
-}
-
 /** Dohvata sve ODOBRENE termine za danas — koristi cron za slanje podsetnika */
 export async function getTodayApprovedAppointments() {
   const todayStart = new Date();

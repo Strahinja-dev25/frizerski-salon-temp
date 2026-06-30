@@ -112,7 +112,7 @@ export default async function HomePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto relative z-10">
               {services.map((service) => (
-                <Card key={service.id} className="glass group hover:-translate-y-2 transition-all duration-300">
+                <Card key={service.id} className="glass group hover:-translate-y-2 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300">
                   <CardContent className="p-8">
                     <div className="flex justify-between items-start mb-6">
                       <h3 className="font-heading font-bold text-2xl group-hover:text-primary transition-colors">{service.name}</h3>
