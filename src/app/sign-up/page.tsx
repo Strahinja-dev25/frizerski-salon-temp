@@ -4,7 +4,7 @@ import { Scissors, ShieldAlert, ArrowLeft } from "lucide-react";
 
 export default function SignUpPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/20 p-6 text-center">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-muted/20 p-6 text-center">
       <div className="max-w-md w-full bg-background p-10 rounded-3xl border border-border shadow-2xl relative overflow-hidden">
         {/* Dekorativni element u pozadini */}
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>

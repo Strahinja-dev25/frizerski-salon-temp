@@ -27,7 +27,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   if (!user) {
     // Whitelisting protection: User is logged into Clerk but not authorized in our DB
     return (
-      <div className="min-h-screen flex items-center justify-center bg-muted/20 pb-20 p-6 text-center">
+      <div className="min-h-[100dvh] flex items-center justify-center bg-muted/20 pb-20 p-6 text-center">
         <div className="max-w-md bg-background p-8 rounded-3xl border border-destructive/20 shadow-2xl">
           <div className="bg-destructive/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
             <Scissors className="w-8 h-8 text-destructive animate-pulse" />

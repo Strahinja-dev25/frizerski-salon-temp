@@ -25,7 +25,7 @@ export default async function BookingPage() {
 
   if (settings && !settings.isBookingActive) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-[100dvh] flex flex-col">
         <Navbar />
         <main className="flex-1 container mx-auto px-4 py-32 flex flex-col items-center justify-center text-center max-w-2xl">
           <div className="bg-destructive/10 p-4 rounded-full mb-6">
@@ -55,7 +55,7 @@ export default async function BookingPage() {
   }));
 
   return (
-    <div className="min-h-screen flex flex-col bg-muted/20">
+    <div className="min-h-[100dvh] flex flex-col bg-muted/20">
       <Navbar />
       <main className="flex-1 container mx-auto px-4 py-24 md:py-32 max-w-5xl">
         <div className="text-center mb-12">

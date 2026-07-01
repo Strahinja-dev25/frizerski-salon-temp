@@ -41,7 +41,7 @@ export default async function StatusPage({
    const isCancelled = resolvedParams.cancelled === "true";
 
    return (
-      <div className="min-h-screen flex flex-col bg-muted/20">
+      <div className="min-h-[100dvh] flex flex-col bg-muted/20">
          <Navbar />
          <main className="flex-1 container mx-auto px-4 py-24 md:py-32 max-w-4xl">
             <div className="mb-8">

@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="sr" suppressHydrationWarning>
-        <body className={`${inter.variable} ${outfit.variable} font-sans antialiased min-h-screen flex flex-col`}>
+        <body className={`${inter.variable} ${outfit.variable} font-sans antialiased min-h-[100dvh] flex flex-col`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
