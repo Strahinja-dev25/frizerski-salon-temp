@@ -7,6 +7,7 @@
 
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { auth } from "@clerk/nextjs/server";
 import {
   updateAppointmentStatusSchema,
@@ -23,6 +24,7 @@ import {
 import {
   createService,
   deleteService,
+  updateService,
 } from "@/services/appointment-service";
 import { canClientCancelDirectly } from "@/services/appointment-service";
 import {
@@ -225,6 +227,7 @@ export async function createServiceAction(
     }
 
     await createService(parsed.data);
+    revalidatePath("/");
     return { success: true, message: "Usluga je uspešno kreirana." };
   } catch (error) {
     console.error("[SERVICE ACTION] Greška:", error);
@@ -241,6 +244,7 @@ export async function deleteServiceAction(
     if (error) return { success: false, message: error };
 
     await deleteService(serviceId);
+    revalidatePath("/");
     return { success: true, message: "Usluga je obrisana." };
   } catch (error) {
     console.error("[SERVICE ACTION] Greška:", error);
@@ -248,6 +252,29 @@ export async function deleteServiceAction(
       success: false,
       message: "Usluga ne može biti obrisana jer ima aktivnih termina.",
     };
+  }
+}
+
+/** Ažuriranje usluge */
+export async function updateServiceAction(
+  serviceId: string,
+  formData: unknown
+): Promise<ApiResponse> {
+  try {
+    const { error } = await getAuthenticatedUser("ADMIN");
+    if (error) return { success: false, message: error };
+
+    const parsed = createServiceSchema.safeParse(formData);
+    if (!parsed.success) {
+      return { success: false, message: parsed.error.issues[0]?.message ?? "Neispravni podaci." };
+    }
+
+    await updateService(serviceId, parsed.data);
+    revalidatePath("/");
+    return { success: true, message: "Usluga je uspešno ažurirana." };
+  } catch (error) {
+    console.error("[SERVICE ACTION] Greška:", error);
+    return { success: false, message: "Došlo je do greške." };
   }
 }
 

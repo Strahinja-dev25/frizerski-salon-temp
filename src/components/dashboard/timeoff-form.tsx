@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { CalendarIcon, Trash2, CalendarHeart } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,7 +21,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { createTimeOffAction, deleteTimeOffAction } from "@/lib/actions/dashboard-actions";
-import { createTimeOffSchema } from "@/lib/validations";
 
 type TimeOffData = {
   id: string;
@@ -43,7 +41,6 @@ export function TimeOffForm({ timeoffs, isAdmin }: { timeoffs: TimeOffData[], is
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(createTimeOffSchema),
     defaultValues: {
       date: "",
       reason: "",
