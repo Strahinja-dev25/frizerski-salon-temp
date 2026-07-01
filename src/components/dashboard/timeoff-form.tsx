@@ -55,8 +55,12 @@ export function TimeOffForm({ timeoffs, isAdmin }: { timeoffs: TimeOffData[], is
 
     setIsSubmitting(true);
     try {
+      // Set to 12:00 PM local time to prevent timezone shift when converting to UTC
+      const normalizedDate = new Date(selectedDate);
+      normalizedDate.setHours(12, 0, 0, 0);
+
       const payload = {
-        date: selectedDate.toISOString(),
+        date: normalizedDate.toISOString(),
         reason: data.reason,
       };
       const res = await createTimeOffAction(payload) as { success: boolean, message: string };
